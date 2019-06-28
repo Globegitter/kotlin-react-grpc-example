@@ -1,5 +1,7 @@
 .gradle
 /build/
+/customer-service/api/build
+/customer-service/app/build
 
 # Ignore Gradle GUI config
 gradle-app.setting

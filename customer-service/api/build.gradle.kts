@@ -55,6 +55,9 @@ protobuf {
         id("coroutines") {
             artifact = "com.github.marcoferrer.krotoplus:protoc-gen-grpc-coroutines:$krotoplusVersion:jvm8@jar"
         }
+        id("grpc-web") {
+            path = "/usr/local/bin/protoc-gen-grpc-web"
+        }
     }
 
     generateProtoTasks {
@@ -64,16 +67,19 @@ protobuf {
                 named("java") {
                     option("lite")
                 }
-//                named("js") {
-//                    option("import_style=commonjs")
-//                }
-                id("js")
+                id("js") {
+                    option("import_style=commonjs")
+                }
             }
             it.plugins {
                 id("grpc") {
                     option("lite")
                 }
                 id("coroutines")
+                id("grpc-web") {
+                    option("import_style=typescript")
+                    option("mode=grpcwebtext")
+                }
             }
         }
     }
