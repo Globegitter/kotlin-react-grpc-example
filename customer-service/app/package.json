@@ -11,7 +11,9 @@
     "react-dom": "^16.8.6",
     "react-scripts": "3.0.1",
     "typescript": "3.5.2",
-    "grpc-web": "^1.0.4"
+    "grpc-web": "^1.0.4",
+    "google-protobuf": "^3.8.0",
+    "@types/google-protobuf": "^3.7.1"
   },
   "scripts": {
     "start": "react-scripts start",

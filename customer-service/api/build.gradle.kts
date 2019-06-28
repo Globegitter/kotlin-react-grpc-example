@@ -1,22 +1,13 @@
 import com.google.protobuf.gradle.*
-//import groovy.lang.Closure
-//import org.gradle.api.NamedDomainObjectContainer
-//import org.gradle.kotlin.dsl.NamedDomainObjectContainerScope
-//import org.gradle.kotlin.dsl.closureOf
 
 val coroutinesVersion: String by project
 val grpcVersion: String by project
 val krotoplusVersion: String by project
 val protobufVersion: String by project
 
-
-
-apply(plugin = "kotlin")
-apply(plugin = "com.google.protobuf")
-apply(plugin = "idea")
-
 plugins {
     application
+    idea
     kotlin("jvm")
     id("com.google.protobuf")
 }
@@ -55,9 +46,9 @@ protobuf {
         id("coroutines") {
             artifact = "com.github.marcoferrer.krotoplus:protoc-gen-grpc-coroutines:$krotoplusVersion:jvm8@jar"
         }
-        id("grpc-web") {
-            path = "/usr/local/bin/protoc-gen-grpc-web"
-        }
+//        id("grpc-web") {
+//            path = "/usr/local/bin/protoc-gen-grpc-web"
+//        }
     }
 
     generateProtoTasks {
@@ -67,19 +58,19 @@ protobuf {
                 named("java") {
                     option("lite")
                 }
-                id("js") {
-                    option("import_style=commonjs")
-                }
+//                id("js") {
+//                    option("import_style=commonjs")
+//                }
             }
             it.plugins {
                 id("grpc") {
                     option("lite")
                 }
                 id("coroutines")
-                id("grpc-web") {
-                    option("import_style=typescript")
-                    option("mode=grpcwebtext")
-                }
+//                id("grpc-web") {
+//                    option("import_style=typescript")
+//                    option("mode=grpcwebtext")
+//                }
             }
         }
     }

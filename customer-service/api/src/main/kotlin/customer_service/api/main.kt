@@ -1,44 +1,54 @@
 import com.github.marcoferrer.krotoplus.coroutines.launchProducerJob
 import com.github.marcoferrer.krotoplus.coroutines.withCoroutineContext
 import customer_service.api.GreeterService
-import io.grpc.Channel
+import io.grpc.ManagedChannelBuilder
 import io.grpc.Server
+import io.grpc.ServerBuilder
 import io.grpc.examples.helloworld.GreeterCoroutineGrpc
 import io.grpc.examples.helloworld.send
-import io.grpc.inprocess.InProcessChannelBuilder
-import io.grpc.inprocess.InProcessServerBuilder
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.consumeEach
 
-val server: Server = InProcessServerBuilder
-    .forName("helloworld")
-    .addService(GreeterService())
-    .directExecutor()
-    .build()
-    .start()
+//val server: Server = InProcessServerBuilder
+//    .forName("helloworld")
+//    .addService(GreeterService())
+//    .directExecutor()
+//    .build()
+//    .start()
+//val serverBuilder = ServerBuilder<?>()
+//
+//val channel: Channel = InProcessChannelBuilder
+//    .forName("helloworld")
+//    .directExecutor()
+//    .build()
 
-val channel: Channel = InProcessChannelBuilder
-    .forName("helloworld")
-    .directExecutor()
-    .build()
+fun main(){
+    val greeterService = GreeterService()
+    val port = 9090
+    val server: Server = ServerBuilder.forPort(port).addService(greeterService).build()
 
-suspend fun main(){
+    val channel = ManagedChannelBuilder.forAddress("localhost", port)
+        .usePlaintext()
+        .build()
 
-    // Optional coroutineContext. Default is Dispatchers.Unconfined
-    val stub = GreeterCoroutineGrpc
-        .newStub(channel)
-        .withCoroutineContext()
+    Runtime.getRuntime().addShutdownHook(Thread {
+        println("Ups, JVM shutdown")
+        server.shutdown()
+        server.awaitTermination()
 
-    performUnaryCall(stub)
+        println("Chat service stopped")
+    })
 
-    performBidiCall(stub)
+    server.start()
+    println("Chat service started on $port")
 
-    performClientStreamingCall(stub)
+    GlobalScope.launch{
+        val stub = GreeterCoroutineGrpc.newStub(channel).withCoroutineContext()
 
-    performServerStreamingCall(stub)
+        performUnaryCall (stub)
+    }
 
-
-    server.shutdown()
+    server.awaitTermination()
 }
 
 suspend fun performUnaryCall(stub: GreeterCoroutineGrpc.GreeterCoroutineStub){
