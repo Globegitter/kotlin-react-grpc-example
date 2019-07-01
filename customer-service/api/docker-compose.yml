@@ -1,0 +1,16 @@
+version: "3"
+
+services:
+  envoy:
+    image: envoyproxy/envoy-alpine:v1.10.0
+    network_mode: "host"
+    volumes:
+      - "./envoy.yaml:/etc/envoy/envoy.yaml"
+    deploy:
+      resources:
+        limits:
+          cpus: '0.05'
+          memory: 50M
+        reservations:
+          cpus: '0.05'
+          memory: 50M

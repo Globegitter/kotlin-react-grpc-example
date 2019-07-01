@@ -1,0 +1,13 @@
+diff --git a/node_modules/grpc-web/index.d.ts b/node_modules/grpc-web/index.d.ts
+index de057ab..6d3a03e 100644
+--- a/node_modules/grpc-web/index.d.ts
++++ b/node_modules/grpc-web/index.d.ts
+@@ -6,7 +6,7 @@ declare module "grpc-web" {
+     class MethodInfo<Request, Response> {
+       constructor (responseType: new () => Response,
+                    requestSerializeFn: (request: Request) => {},
+-                   responseDeserializeFn: (bytes: {}) => Response);
++                   responseDeserializeFn: (bytes: Uint8Array) => Response);
+     }
+   }
+ 

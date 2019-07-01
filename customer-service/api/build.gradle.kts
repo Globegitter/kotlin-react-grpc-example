@@ -49,9 +49,6 @@ protobuf {
         id("doc") {
             path = "/home/markus/go/bin/protoc-gen-doc"
         }
-//        id("grpc-web") {
-//            path = "/usr/local/bin/protoc-gen-grpc-web"
-//        }
     }
 
     generateProtoTasks {
@@ -61,9 +58,6 @@ protobuf {
                 named("java") {
                     option("lite")
                 }
-//                id("js") {
-//                    option("import_style=commonjs")
-//                }
             }
             it.plugins {
                 id("grpc") {
@@ -71,10 +65,6 @@ protobuf {
                 }
                 id("coroutines")
                 id("doc")
-//                id("grpc-web") {
-//                    option("import_style=typescript")
-//                    option("mode=grpcwebtext")
-//                }
             }
         }
     }

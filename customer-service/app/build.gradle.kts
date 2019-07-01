@@ -1,4 +1,5 @@
 import com.google.protobuf.gradle.*
+import com.moowork.gradle.node.yarn.YarnTask
 
 val coroutinesVersion: String by project
 val grpcVersion: String by project
@@ -23,18 +24,27 @@ node {
     download = true
 }
 
-//val generateProto by tasks.existing
 val yarn_install by tasks.existing
-//val generateProto by tasks.existing
 
 val yarn_run_start by tasks.existing {
     dependsOn(yarn_install)
-    dependsOn("generateProto")
+    dependsOn("copyGrpcWeb")
+}
+
+tasks.register<Copy>("copyGrpcWeb") {
+    from(tasks.getByPath("generateProto"))
+//    from(generateProto)
+    into("src/")
+    // This is a workaround for https://github.com/facebook/create-react-app/issues/7295
+    // We probably want to eject and use our own config to not have this issue anymore
+    filter { line: String ->
+        if (line.contains("goog.exportSymbol")) "$line \n/* eslint-disable no-undef */" else line
+    }
 }
 
 val yarn_run_build by tasks.existing {
     dependsOn(yarn_install)
-    dependsOn("generateProto")
+    dependsOn("copyGrpcWeb")
 
     inputs.files(fileTree("src"))
     inputs.file("package.json")
@@ -49,6 +59,7 @@ val assemble by tasks.existing {
     dependsOn(yarn_run_build)
 }
 
+// No Java in this project, otherwise this throws an error
 val compileJava by tasks.existing {
     enabled = false
 }
