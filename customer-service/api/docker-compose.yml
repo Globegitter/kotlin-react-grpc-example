@@ -1,4 +1,4 @@
-version: "3"
+version: "2"
 
 services:
   envoy:
@@ -6,11 +6,4 @@ services:
     network_mode: "host"
     volumes:
       - "./envoy.yaml:/etc/envoy/envoy.yaml"
-    deploy:
-      resources:
-        limits:
-          cpus: '0.05'
-          memory: 50M
-        reservations:
-          cpus: '0.05'
-          memory: 50M
+    mem_limit: 50000000 # 50 MB

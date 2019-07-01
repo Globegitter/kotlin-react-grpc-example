@@ -10,6 +10,7 @@ plugins {
     idea
     kotlin("jvm")
     id("com.google.protobuf")
+    id("com.avast.gradle.docker-compose") version "0.9.4"
 }
 
 application {
@@ -33,6 +34,10 @@ dependencies {
     implementation("io.grpc:grpc-stub:$grpcVersion")
     implementation("io.grpc:grpc-netty:$grpcVersion")
 }
+
+val run = tasks.getByPath("run")
+
+dockerCompose.isRequiredBy(run)
 
 protobuf {
     protoc {
