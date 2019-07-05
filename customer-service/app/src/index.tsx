@@ -7,7 +7,19 @@ import * as serviceWorker from './serviceWorker';
 // TODO: Should use GreeterPromiseClient but not yet supported in TS. See https://github.com/grpc/grpc-web/issues/580
 import { GreeterClient } from './grpc-web/HelloworldServiceClientPb';
 
+declare global {
+  interface Window {
+    __GRPCWEB_DEVTOOLS__: (arg0: Array<any>) => void;
+  }
+}
+
+const enableDevTools = window.__GRPCWEB_DEVTOOLS__ || (() => {});
+
 const client = new GreeterClient('http://localhost:8080');
+
+enableDevTools([
+  client,
+]);
 
 export const createDefaultClient = (): GreeterClient => client;
 
